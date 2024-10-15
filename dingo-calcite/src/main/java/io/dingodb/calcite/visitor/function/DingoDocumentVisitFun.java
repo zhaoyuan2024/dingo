@@ -43,8 +43,11 @@ import io.dingodb.exec.base.OutputHint;
 import io.dingodb.exec.base.Task;
 import io.dingodb.exec.dag.Vertex;
 import io.dingodb.exec.expr.SqlExpr;
+import io.dingodb.exec.fun.vector.VectorImageFun;
+import io.dingodb.exec.fun.vector.VectorTextFun;
 import io.dingodb.exec.operator.params.PartDocumentParam;
 import io.dingodb.exec.operator.params.TxnPartDocumentParam;
+import io.dingodb.exec.restful.VectorExtract;
 import io.dingodb.exec.transaction.base.ITransaction;
 import io.dingodb.expr.rel.RelOp;
 import io.dingodb.expr.rel.op.RelOpBuilder;
@@ -259,6 +262,19 @@ public final class DingoDocumentVisitFun {
         }
         visitor.setScan(true);
         return outputs;
+    }
+
+    public static String getDocumentKeyword(List<Object> operandsList) {
+        String keyword;
+        Object call = operandsList.get(2);
+        if (call instanceof RexCall) {
+            RexCall rexCall = (RexCall) call;
+            keyword = rexCall.toString();
+            return keyword;
+        }
+        SqlBasicCall basicCall = (SqlBasicCall) operandsList.get(2);
+        keyword = basicCall.toString();
+        return keyword;
     }
 
     private static boolean pushDown(RexNode filter, Table table, IndexTable indexTable) {
