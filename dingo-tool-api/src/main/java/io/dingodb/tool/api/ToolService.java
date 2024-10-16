@@ -17,6 +17,7 @@
 package io.dingodb.tool.api;
 
 import io.dingodb.common.CommonId;
+import io.dingodb.common.document.DocumentGetSimilary;
 
 import java.util.List;
 
@@ -28,4 +29,8 @@ public interface ToolService {
 
     List<List<Float>> vectorCalcDistance(CommonId regionId,
                                          io.dingodb.common.vector.VectorCalcDistance vectorCalcDistance);
+
+    List<List<Float>> documentCalsimilary(CommonId regionId,
+                                         DocumentGetSimilary documentGetKeyword);
+
 }

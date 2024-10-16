@@ -19,7 +19,9 @@ package io.dingodb.tool.service;
 import com.google.auto.service.AutoService;
 import io.dingodb.common.CommonId;
 import io.dingodb.common.config.DingoConfiguration;
+import io.dingodb.common.document.DocumentGetSimilary;
 import io.dingodb.common.vector.VectorCalcDistance;
+import io.dingodb.document.Document.*;
 import io.dingodb.sdk.service.Services;
 import io.dingodb.sdk.service.UtilService;
 import io.dingodb.sdk.service.entity.common.Location;
@@ -94,6 +96,29 @@ public class ToolService implements io.dingodb.tool.api.ToolService {
                 .collect(Collectors.toList()))
             .opRightVectors(distance.getRightList().stream()
                 .map(r -> Vector.builder().valueType(ValueType.FLOAT).dimension(distance.getDimension()).floatValues(r).build())
+                .collect(Collectors.toList()))
+            .isReturnNormlize(false)
+            .build();
+    }
+
+    @Override
+    public List<String> documentGetSimilary(CommonId region,
+                                                DocumentGetSimilary similary) {
+        DocumentScanQueryRequest request = buildRequest(similary);
+        UtilService utilService = Services.utilService(coordinators, region.seq, 30);
+        DocumentScanQueryResponse response = utilService.documentGetSimilary(request);
+
+        return response.stream().map(Document::getInternalDistances).collect(Collectors.toList());
+    }
+
+    private static DocumentScanQueryRequest buildRequest(DocumentGetSimilary similary) {
+
+        return DocumentGetSimilaryRequest.builder()
+            .opLeftVectors(similary.getLeftList().stream()
+                .map(l -> Vector.builder().floatValues(l).valueType(ValueType.FLOAT).build())
+                .collect(Collectors.toList()))
+            .opRightVectors(similary.getRightList().stream()
+                .map(r -> Vector.builder().valueType(ValueType.FLOAT).floatValues(r).build())
                 .collect(Collectors.toList()))
             .isReturnNormlize(false)
             .build();
