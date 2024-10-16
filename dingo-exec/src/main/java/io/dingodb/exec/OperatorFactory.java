@@ -25,6 +25,7 @@ import io.dingodb.exec.operator.CoalesceOperator;
 import io.dingodb.exec.operator.CompareAndSetOperator;
 import io.dingodb.exec.operator.CopyOperator;
 import io.dingodb.exec.operator.DistributeOperator;
+import io.dingodb.exec.operator.DocumentKeyWordOperator;
 import io.dingodb.exec.operator.EmptySourceOperator;
 import io.dingodb.exec.operator.ExportDataOperator;
 import io.dingodb.exec.operator.FilterOperator;
@@ -164,6 +165,8 @@ import static io.dingodb.exec.utils.OperatorCodeUtils.TXN_SCAN_WITH_PIPE_OP;
 import static io.dingodb.exec.utils.OperatorCodeUtils.VALUES;
 import static io.dingodb.exec.utils.OperatorCodeUtils.VECTOR_PARTITION;
 import static io.dingodb.exec.utils.OperatorCodeUtils.VECTOR_POINT_DISTANCE;
+import static io.dingodb.exec.utils.OperatorCodeUtils.DOCUMENT_KEYWORD;
+
 
 public final class OperatorFactory {
 
@@ -240,6 +243,7 @@ public final class OperatorFactory {
         OPERATORS.put(PESSIMISTIC_LOCK, PessimisticLockOperator.INSTANCE);
         OPERATORS.put(PESSIMISTIC_RESIDUAL_LOCK, PessimisticResidualLockOperator.INSTANCE);
         OPERATORS.put(TXN_PART_DOCUMENT, TxnPartDocumentOperator.INSTANCE);
+        OPERATORS.put(DOCUMENT_KEYWORD, DocumentKeyWordOperator.INSTANCE);
         OPERATORS.put(TXN_CLEAN_EXTRA_DATA_CACHE, CleanExtraDataCacheOperator.INSTANCE);
     }
 

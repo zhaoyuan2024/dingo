@@ -265,16 +265,16 @@ public final class DingoDocumentVisitFun {
     }
 
     public static String getDocumentKeyword(List<Object> operandsList) {
-        String keyword;
-        Object call = operandsList.get(2);
-        if (call instanceof RexCall) {
-            RexCall rexCall = (RexCall) call;
-            keyword = rexCall.toString();
-            return keyword;
-        }
-        SqlBasicCall basicCall = (SqlBasicCall) operandsList.get(2);
-        keyword = basicCall.toString();
-        return keyword;
+//        Object call = operandsList.get(2);
+//        if (call instanceof RexCall) {
+//            RexCall rexCall = (RexCall) call;
+//            keyword = rexCall.toString();
+//            return keyword;
+//        }
+//        SqlBasicCall basicCall = (SqlBasicCall) call;
+//        keyword = basicCall.toString();
+
+        return operandsList.get(2).toString();
     }
 
     private static boolean pushDown(RexNode filter, Table table, IndexTable indexTable) {
