@@ -33,33 +33,51 @@ public class DocumentKeyWordParam extends AbstractParams {
 
     private final RangeDistribution rangeDistribution;
 
-    private final Integer documentIndex;
+    private final Integer documentIdIndex;
 
     private final String targetkeyword;
 
-    private final String metricType;
-
     private final CommonId indexTableId;
+
+    private final CommonId tableId;
 
     private final List<Object[]> cache;
 
     private final TupleMapping selection;
 
+    private final String tableName;
+
+    private final String indexName;
+
+    private final Integer topK;
+
+    private long  scanTs;
+
+    protected CommonId partId;
+
     public DocumentKeyWordParam(
         RangeDistribution rangeDistribution,
-        Integer documentIndex,
+        CommonId tableId,
+        Integer documentIdIndex,
         CommonId indexTableId,
         String targetkeyword,
-        String metricType,
-        TupleMapping selection
+        TupleMapping selection,
+        String tableName,
+        String indexName,
+        long scanTs,
+        Integer topK
     ) {
         this.rangeDistribution = rangeDistribution;
-        this.documentIndex = documentIndex;
+        this.tableId = tableId;
+        this.documentIdIndex = documentIdIndex;
         this.targetkeyword = targetkeyword;
-        this.metricType = metricType;
         this.indexTableId = indexTableId;
         cache = new LinkedList<>();
         this.selection = selection;
+        this.tableName = tableName;
+        this.indexName = indexName;
+        this.scanTs = scanTs;
+        this.topK = topK;
     }
 
     public void clear() {

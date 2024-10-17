@@ -76,7 +76,6 @@ public class DingoDocumentIndexRule extends RelRule<RelRule.Config> {
     public void onMatch(RelOptRuleCall call) {
         DingoDocument document = call.rel(0);
         RelNode relNode = getDingoGetDocumentByKeyword(document.getFilter(), document, false);
-//        RelNode relNode = null;
         if (relNode == null) {
             return;
         }
@@ -94,15 +93,15 @@ public class DingoDocumentIndexRule extends RelRule<RelRule.Config> {
 
 //        String targetDocument = getTargetKeyword(document.getOperands());
         // if filter matched point get by primary key, then DingoGetByKeys priority highest
-        Pair<Integer, Integer> documentIdPair = getDocumentIndex(dingoTable);
-        assert documentIdPair != null;
+        Pair<Integer, Integer> textIdPair = getTextIdIndex(dingoTable);
+        assert textIdPair != null;
         RelTraitSet traitSet = document.getTraitSet().replace(DingoRelStreaming.of(document.getTable()));
         boolean preFilter = document.getHints() != null
             && !document.getHints().isEmpty()
             && "text_search_pre".equalsIgnoreCase(document.getHints().get(0).hintName);
 
         // document filter match primary point get
-        RelNode relNode = prePrimaryOrScalarPlan(condition, document,documentIdPair, traitSet, selection, preFilter);
+        RelNode relNode = prePrimaryOrScalarPlan(condition, document,textIdPair, traitSet, selection, preFilter);
         if (relNode != null) {
             return relNode;
         }
@@ -139,7 +138,7 @@ public class DingoDocumentIndexRule extends RelRule<RelRule.Config> {
            document.getTraitSet(),
             dingoTableScan,
            document.getIndexTableId(),
-           documentIdPair.getKey(),
+            textIdPair.getKey(),
            document.getIndexTable(),
             false);
         return new DingoGetDocumentByKeyWord(
@@ -149,8 +148,8 @@ public class DingoDocumentIndexRule extends RelRule<RelRule.Config> {
             condition,
            document.getTable(),
            document.getOperands(),
-           documentIdPair.getKey(),
-           documentIdPair.getValue(),
+            textIdPair.getKey(),
+            textIdPair.getValue(),
            document.getIndexTableId(),
            document.getSelection(),
            document.getIndexTable()
@@ -283,7 +282,7 @@ public class DingoDocumentIndexRule extends RelRule<RelRule.Config> {
         return new DingoStreamingConverter(document.getCluster(),
             traits, dingoGetDocumentByKeyWord);
     }
-    private static Pair<Integer, Integer> getDocumentIndex(DingoTable dingoTable) {
+    private static Pair<Integer, Integer> getTextIdIndex(DingoTable dingoTable) {
         List<IndexTable> indexes = dingoTable.getTable().getIndexes();
         for (IndexTable index : indexes) {
 

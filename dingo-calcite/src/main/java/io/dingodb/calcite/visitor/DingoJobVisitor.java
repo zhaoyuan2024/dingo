@@ -258,7 +258,7 @@ public class DingoJobVisitor implements DingoRelVisitor<Collection<Vertex>> {
 
     @Override
     public Collection<Vertex> visit(@NonNull DingoGetDocumentByKeyWord rel) {
-        return DingoGetDocumentByKeyWordVisitFun.visit(job, idGenerator, currentLocation, this, rel);
+        return DingoGetDocumentByKeyWordVisitFun.visit(job, idGenerator, currentLocation, transaction, this, rel);
     }
 
     public Collection<Vertex> visit(@NonNull DingoGetVectorByDistance rel) {

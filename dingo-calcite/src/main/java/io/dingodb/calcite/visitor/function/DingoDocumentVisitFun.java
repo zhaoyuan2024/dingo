@@ -265,16 +265,19 @@ public final class DingoDocumentVisitFun {
     }
 
     public static String getDocumentKeyword(List<Object> operandsList) {
-//        Object call = operandsList.get(2);
-//        if (call instanceof RexCall) {
-//            RexCall rexCall = (RexCall) call;
-//            keyword = rexCall.toString();
-//            return keyword;
-//        }
-//        SqlBasicCall basicCall = (SqlBasicCall) call;
-//        keyword = basicCall.toString();
-
         return operandsList.get(2).toString();
+    }
+
+    public static String getDocuementTabName(List<Object> operandsList) {
+        return operandsList.get(0).toString();
+    }
+
+    public static String getDocuementIndexName(List<Object> operandsList) {
+        return operandsList.get(1).toString();
+    }
+
+    public static Integer getDocumentTopK(@NonNull List<Object> operandsList) {
+        return ((Number) Objects.requireNonNull(((SqlNumericLiteral) operandsList.get(3)).getValue())).intValue();
     }
 
     private static boolean pushDown(RexNode filter, Table table, IndexTable indexTable) {
