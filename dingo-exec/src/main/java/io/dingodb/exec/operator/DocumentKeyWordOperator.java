@@ -88,10 +88,8 @@ public class DocumentKeyWordOperator extends SoleOutOperator {
             return;
         }
 
-        String keyword = param.getTargetkeyword().toString();
-//        String tableName = param.getTableName().toString();
+        String keyword = param.getTargetkeyword();
         Integer topK = param.getTopK();
-//        String indexName = param.getIndexName().toString();
         StoreInstance instance = Services.KV_STORE.getInstance(param.getTableId(), param.getRangeDistribution().getId());
         DocumentSearchParameter documentSearchParameter = DocumentSearchParameter.builder()
             .topN(topK)
@@ -104,19 +102,19 @@ public class DocumentKeyWordOperator extends SoleOutOperator {
             param.getIndexTableId(),
             documentSearchParameter);
         List<Object[]> results = new ArrayList<>();
-//        List<Column> columns = param.getTable().getColumns();
-//        Object[] priTuples = new Object[param.getTable().columns.size() + 1];
+        List<Column> columns = param.getTable().getColumns();
+        Object[] priTuples = new Object[param.getTable().columns.size() + 1];
         for (DocumentWithScore document : documentWithScores) {
             if(document.getDocumentWithId().getDocument().getTableData() != null){
                 KeyValue tableData = new KeyValue(document.getDocumentWithId().getDocument().getTableData().getTableKey(),
                     document.getDocumentWithId().getDocument().getTableData().getTableValue());
                 byte[] tmp1 = new byte[tableData.getKey().length];
                 System.arraycopy(tableData.getKey(), 0, tmp1, 0, tableData.getKey().length);
-//                CommonId regionId = PartitionService.getService(
-//                        Optional.ofNullable(param.getTable().getPartitionStrategy())
-//                            .orElse(DingoPartitionServiceProvider.RANGE_FUNC_NAME))
-//                    .calcPartId(tableData.getKey(), param.getRangeDistributions());
-//                CodecService.getDefault().setId(tmp1, regionId.domain);
+                CommonId regionId = PartitionService.getService(
+                        Optional.ofNullable(param.getTable().getPartitionStrategy())
+                            .orElse(DingoPartitionServiceProvider.RANGE_FUNC_NAME))
+                    .calcPartId(tableData.getKey(), param.getRangeDistributions());
+                CodecService.getDefault().setId(tmp1, regionId.domain);
                 CommonId txnId = vertex.getTask().getTxnId();
 //                Iterator<Object[]> local = getLocalStore(
 //                    regionId,

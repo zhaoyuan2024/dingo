@@ -33,6 +33,7 @@ import io.dingodb.exec.transaction.base.ITransaction;
 import io.dingodb.meta.MetaService;
 import io.dingodb.meta.entity.IndexTable;
 import io.dingodb.meta.entity.IndexType;
+import io.dingodb.meta.entity.Table;
 import lombok.AllArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -77,6 +78,7 @@ public final class DingoGetDocumentByKeyWordVisitFun {
             String targetDocument = getTargetKeyword(rel.getOperands());
             String tabName = getTableName(rel.getOperands());
             Integer topK = getTopk(rel.getOperands());
+            Table table = getTable(dingoRelOptTable);
             String indexName = getIndexName(rel.getOperands());
             IndexTable indexTable = getDocumentIndexTable(dingoRelOptTable);
             CommonId tableId = indexTable.getPrimaryId();
@@ -90,6 +92,7 @@ public final class DingoGetDocumentByKeyWordVisitFun {
 
             DocumentKeyWordParam param = new DocumentKeyWordParam(
                 distributions.firstEntry().getValue(),
+                table,
                 tableId,
                 rel.getDocumentPriIdIndex(),
                 rel.getIndexTableId(),
@@ -124,7 +127,10 @@ public final class DingoGetDocumentByKeyWordVisitFun {
         Integer topk = getDocumentTopK(operandList).intValue();
         return topk;
     }
-
+    public static Table getTable(DingoRelOptTable dingoRelOptTable){
+        DingoTable dingoTable = dingoRelOptTable.unwrap(DingoTable.class);
+        return dingoTable.getTable();
+    }
     private static IndexTable getDocumentIndexTable(DingoRelOptTable dingoRelOptTable) {
         DingoTable dingoTable = dingoRelOptTable.unwrap(DingoTable.class);
         List<IndexTable> indexes = dingoTable.getTable().getIndexes();

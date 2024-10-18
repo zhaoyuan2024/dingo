@@ -17,6 +17,7 @@
 package io.dingodb.exec.operator;
 
 import io.dingodb.common.CommonId;
+import io.dingodb.common.log.LogUtils;
 import io.dingodb.common.profile.OperatorProfile;
 import io.dingodb.common.store.KeyValue;
 import io.dingodb.codec.CodecService;
@@ -78,7 +79,8 @@ public class TxnPartDocumentOperator extends FilterProjectSourceOperator {
         Object[] priTuples = new Object[param.getTable().columns.size() + 1];
         if (param.isLookUp()) {
             for (DocumentWithScore document : documentWithScores) {
-                if(document.getDocumentWithId().getDocument().getTableData() != null){
+                if(document.getDocumentWithId().getDocument() != null){
+                    if(document.getDocumentWithId().getDocument().getTableData() != null){
                     KeyValue tableData = new KeyValue(document.getDocumentWithId().getDocument().getTableData().getTableKey(),
                         document.getDocumentWithId().getDocument().getTableData().getTableValue());
                     byte[] tmp1 = new byte[tableData.getKey().length];
@@ -114,7 +116,8 @@ public class TxnPartDocumentOperator extends FilterProjectSourceOperator {
                     Object[] decode = param.getCodec().decode(keyValue);
                     decode[decode.length - 1] = document.getScore();
                     results.add(decode);
-                } else {
+                } else
+                {
                     Map<String, DocumentValue> documentData = document.getDocumentWithId().getDocument().getDocumentData();
                     Set<Map.Entry<String, DocumentValue>> entries = documentData.entrySet();
                     for (Map.Entry<String, DocumentValue> entry : entries) {
@@ -134,6 +137,9 @@ public class TxnPartDocumentOperator extends FilterProjectSourceOperator {
                     float score = document.getScore();
                     priTuples[priTuples.length - 1] = score;
                     results.add(priTuples);
+                }
+                }else{
+                    LogUtils.error(log,("Failed to get document"));
                 }
             }
 

@@ -16,12 +16,11 @@
 
 package io.dingodb.exec.operator.params;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.dingodb.common.CommonId;
 import io.dingodb.common.partition.RangeDistribution;
 import io.dingodb.common.type.TupleMapping;
+import io.dingodb.meta.entity.Table;
 import lombok.Getter;
 
 import java.util.LinkedList;
@@ -55,8 +54,11 @@ public class DocumentKeyWordParam extends AbstractParams {
 
     protected CommonId partId;
 
+    protected Table table;
+
     public DocumentKeyWordParam(
         RangeDistribution rangeDistribution,
+        Table table,
         CommonId tableId,
         Integer documentIdIndex,
         CommonId indexTableId,
@@ -68,6 +70,7 @@ public class DocumentKeyWordParam extends AbstractParams {
         Integer topK
     ) {
         this.rangeDistribution = rangeDistribution;
+        this.table = table;
         this.tableId = tableId;
         this.documentIdIndex = documentIdIndex;
         this.targetkeyword = targetkeyword;
