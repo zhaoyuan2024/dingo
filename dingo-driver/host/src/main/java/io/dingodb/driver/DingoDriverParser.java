@@ -977,14 +977,11 @@ public final class DingoDriverParser extends DingoParser {
             new BasicSqlType(RelDataTypeSystem.DEFAULT, SqlTypeName.CHAR), null, false);
         ColumnMetaData colMeta3 = metaData(typeFactory, 2, "duration",
             new BasicSqlType(RelDataTypeSystem.DEFAULT, SqlTypeName.CHAR), null, false);
-        ColumnMetaData colMeta4 = metaData(typeFactory, 3, "rowcount",
-            new BasicSqlType(RelDataTypeSystem.DEFAULT, SqlTypeName.BIGINT), null, true);
 
         List<ColumnMetaData> metaDataList = new ArrayList<>();
         metaDataList.add(colMeta1);
         metaDataList.add(colMeta2);
         metaDataList.add(colMeta3);
-        metaDataList.add(colMeta4);
         return metaDataList;
     }
 

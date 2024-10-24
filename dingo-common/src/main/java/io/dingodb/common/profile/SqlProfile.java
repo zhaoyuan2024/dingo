@@ -101,11 +101,10 @@ public class SqlProfile extends Profile {
         }
         if (execProfile != null) {
             if (planEndTime > 0) {
-                Object[] val = new Object[4];
+                Object[] val = new Object[3];
                 val[0] = termStr + "schedule job";
                 val[1] = DateTimeUtils.timeFormat(new Time(execProfile.getStart()));
                 val[2] = String.valueOf(execProfile.start - planEndTime);
-                val[3] = Long.valueOf(this.getCount());
                 rowList.add(val);
             }
             execProfile.traceTree(prefix, rowList);

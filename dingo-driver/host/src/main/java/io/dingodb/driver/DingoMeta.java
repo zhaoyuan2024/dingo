@@ -1356,7 +1356,7 @@ public class DingoMeta extends MetaImpl {
     public static void getTraceValues(SqlProfile sqlProfile, List<Object[]> rowList) {
         long duration = System.currentTimeMillis() - sqlProfile.getStart();
         String startTs = DateTimeUtils.timeFormat(new Time(sqlProfile.getStart()));
-        rowList.add(new Object[] {"trace", startTs, String.valueOf(duration), Long.valueOf(0)});
+        rowList.add(new Object[] {"trace", startTs, String.valueOf(duration)});
         sqlProfile.traceTree(rowList);
     }
 }
